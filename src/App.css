@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #d6006e;
+  --primary-dark: #a8005a;
+  --primary-light: #fff0f7;
+  --primary-glow: rgba(214,0,110,0.18);
+  --accent: #9b00d6;
+  --accent-light: #f5f0ff;
+  --gradient: linear-gradient(135deg, #d6006e 0%, #9b00d6 100%);
+  --gradient-soft: linear-gradient(135deg, #fff0f7 0%, #f5f0ff 100%);
+  --dark: #0f0f1a;
+  --dark2: #1a1a2e;
+  --dark3: #252540;
+  --text: #2a2a3d;
+  --text-muted: #7a7a9a;
+  --border: #e8e8f0;
+  --border-light: #f0f0f8;
+  --bg: #f8f8fc;
+  --white: #ffffff;
+  --success: #00c896;
+  --danger: #ff3b6b;
+  --warning: #ffb800;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+  --shadow-sm: 0 2px 12px rgba(214,0,110,0.06);
+  --shadow: 0 4px 24px rgba(214,0,110,0.10);
+  --shadow-hover: 0 12px 40px rgba(214,0,110,0.18);
+  --shadow-dark: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; }
+img { display: block; }
+
+.container {
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 24px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s;
+}
+.btn:hover::after { background: rgba(255,255,255,0.1); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--primary-glow);
+}
+.btn-primary:hover {
+  box-shadow: 0 8px 28px var(--primary-glow);
+  color: #fff;
+}
+
+.btn-secondary { background: var(--border); color: var(--text); }
+.btn-secondary:hover { background: #dddde8; }
+
+.btn-dark { background: var(--dark); color: #fff; }
+.btn-dark:hover { background: var(--dark2); color: #fff; }
+
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #e0003a; }
+
+.btn-outline-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+}
+.btn-outline-danger:hover { background: var(--danger); color: #fff; }
+
+/* ── Status Pills ── */
+.status-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+.status-pill.pending    { background: #fff7ed; color: #c2410c; }
+.status-pill.approved   { background: #f0fdf4; color: #15803d; }
+.status-pill.processing { background: #eff6ff; color: #1d4ed8; }
+.status-pill.shipped    { background: #faf5ff; color: #7e22ce; }
+.status-pill.delivered  { background: #f0fdf4; color: #166534; }
+.status-pill.cancelled  { background: #fff0f7; color: var(--primary); }

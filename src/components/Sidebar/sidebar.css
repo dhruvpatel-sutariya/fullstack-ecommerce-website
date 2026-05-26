@@ -1,0 +1,20 @@
+.sidebar-panel {
+    width: 230px; flex-shrink: 0;
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px; height: fit-content;
+}
+.sidebar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1.5px solid var(--border-light); }
+.sidebar-head h4 { font-size: 14px; font-weight: 900; color: var(--dark); margin: 0; }
+.sidebar-head button { background: none; border: none; cursor: pointer; font-size: 15px; color: var(--text-muted); transition: color 0.2s; }
+.sidebar-head button:hover { color: var(--danger); }
+
+.sidebar-section h5 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 10px; }
+.sidebar-section ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-section ul li { padding: 9px 12px; border-radius: var(--radius); cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text); transition: all 0.15s; margin-bottom: 2px; }
+.sidebar-section ul li:hover { background: var(--primary-light); color: var(--primary); }
+.sidebar-section ul li.active { background: var(--gradient); color: #fff; box-shadow: 0 4px 12px var(--primary-glow); }
+
+@media (max-width: 768px) {
+    .sidebar-panel { display: none; position: fixed; top: 0; left: 0; height: 100vh; z-index: 999; border-radius: 0; overflow-y: auto; width: 260px; box-shadow: 4px 0 30px rgba(214,0,110,0.15); }
+    .sidebar-panel.open { display: block; }
+}

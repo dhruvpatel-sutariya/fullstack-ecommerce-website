@@ -1,0 +1,59 @@
+.cart-page { padding: 36px 0 64px; }
+
+.cart-title { font-size: 26px; font-weight: 900; color: var(--dark); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+.cart-title span { font-size: 14px; color: var(--text-muted); font-weight: 600; background: var(--bg); padding: 4px 14px; border-radius: 999px; }
+
+.cart-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+
+.cart-items { display: flex; flex-direction: column; gap: 14px; }
+.cart-item {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 16px;
+  transition: all 0.2s;
+}
+.cart-item:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+.cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius); flex-shrink: 0; background: var(--gradient-soft); }
+.item-info { flex: 1; min-width: 0; }
+.item-name { display: block; font-size: 14px; font-weight: 700; color: var(--dark); text-decoration: none; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-name:hover { color: var(--primary); }
+.item-category { display: block; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.item-price { font-size: 14px; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.item-qty { display: flex; align-items: center; border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.item-qty button { background: var(--bg); border: none; width: 32px; height: 32px; cursor: pointer; font-size: 14px; font-weight: 800; color: var(--text); transition: all 0.15s; }
+.item-qty button:hover { background: var(--primary-light); color: var(--primary); }
+.item-qty span { padding: 0 14px; font-size: 14px; font-weight: 800; color: var(--dark); }
+
+.item-total { font-size: 15px; font-weight: 800; color: var(--dark); min-width: 80px; text-align: right; }
+.remove-btn { background: #fff0f5; border: none; color: var(--danger); cursor: pointer; font-size: 15px; padding: 8px; border-radius: var(--radius); transition: all 0.15s; }
+.remove-btn:hover { background: var(--danger); color: #fff; }
+
+.cart-summary {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 26px;
+  position: sticky; top: 90px;
+  box-shadow: var(--shadow-sm);
+}
+.cart-summary h3 { font-size: 17px; font-weight: 900; color: var(--dark); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px solid var(--border-light); }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 12px; }
+.summary-row.total { font-size: 18px; font-weight: 900; color: var(--dark); border-top: 1.5px solid var(--border-light); padding-top: 14px; margin-top: 4px; }
+
+.checkout-btn {
+  width: 100%; background: var(--gradient); color: #fff; border: none;
+  padding: 14px; border-radius: var(--radius); font-size: 15px; font-weight: 800;
+  cursor: pointer; transition: all 0.25s; margin-top: 18px; font-family: inherit;
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+.checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px var(--primary-glow); }
+.login-link { display: block; text-align: center; margin-top: 12px; color: var(--primary); font-size: 13px; font-weight: 700; }
+
+.empty-cart { text-align: center; padding: 90px 20px; }
+.empty-cart svg { font-size: 72px; color: var(--border); margin-bottom: 18px; }
+.empty-cart h2 { font-size: 24px; font-weight: 900; color: var(--dark); margin-bottom: 8px; }
+.empty-cart p { color: var(--text-muted); margin-bottom: 28px; font-size: 15px; }
+.shop-btn { display: inline-block; background: var(--gradient); color: #fff; padding: 14px 38px; border-radius: 999px; text-decoration: none; font-weight: 800; font-size: 15px; box-shadow: 0 6px 20px var(--primary-glow); transition: all 0.25s; }
+.shop-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px var(--primary-glow); color: #fff; }
+
+@media (max-width: 900px) { .cart-grid { grid-template-columns: 1fr; } .cart-summary { position: static; } }
+@media (max-width: 480px) { .cart-item { flex-wrap: wrap; } .item-total { min-width: auto; } }
