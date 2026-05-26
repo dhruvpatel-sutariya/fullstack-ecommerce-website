@@ -9,8 +9,8 @@ connectDB();
 const app = express();
 
 app.use(cors({
-  origin: ['https://transcendent-chimera-94287b.netlify.app', 'http://localhost:3000'],
-  credentials: true
+  origin: '*',
+  credentials: false
 }));
 app.use(express.json());
 

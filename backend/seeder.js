@@ -14,7 +14,12 @@ const importData = async () => {
     console.log('Clearing users...');
     await User.deleteMany();
 
-    console.log('Creating admin user...');
+    console.log('Creating admin useClearing users...
+Creating admin user...
+Admin created: admin@quickmart.test
+Inserting products...
+Data Imported!
+Admin login: admin@quickmart.test / admin123r...');
     const adminUser = await User.create({
       name: 'Admin User',
       email: 'admin@quickmart.test',
