@@ -3,6 +3,45 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+});
+
+const sendEmail = async (to, subject, html) => {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return;
+    try {
+        await transporter.sendMail({ from: `QuickMart <${process.env.EMAIL_USER}>`, to, subject, html });
+    } catch (e) {
+        console.log('Email error:', e.message);
+    }
+};
+
+const orderConfirmationEmail = (order, userName) => `
+<div style="font-family:sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px">
+  <h2 style="color:#d6006e">🛒 Order Confirmed!</h2>
+  <p>Hi <b>${userName}</b>, your order has been placed successfully.</p>
+  <p><b>Order ID:</b> ${order._id}</p>
+  <table width="100%" cellpadding="8" style="border-collapse:collapse;margin:16px 0">
+    <tr style="background:#f8f8fc"><th align="left">Product</th><th>Qty</th><th>Price</th></tr>
+    ${order.orderItems.map(i => `<tr><td>${i.name}</td><td align="center">${i.quantity}</td><td align="right">₹${i.price}</td></tr>`).join('')}
+    <tr style="border-top:2px solid #eee"><td colspan="2"><b>Total</b></td><td align="right"><b>₹${order.totalPrice}</b></td></tr>
+  </table>
+  <p><b>Shipping to:</b> ${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.state}</p>
+  <p style="color:#888;font-size:12px">Thank you for shopping with QuickMart!</p>
+</div>`;
+
+const statusUpdateEmail = (order, userName, status, message) => `
+<div style="font-family:sans-serif;max-width:600px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px">
+  <h2 style="color:#d6006e">📦 Order Status Updated</h2>
+  <p>Hi <b>${userName}</b>, your order status has been updated.</p>
+  <p><b>Order ID:</b> ${order._id}</p>
+  <p><b>New Status:</b> <span style="background:#fff0f7;color:#d6006e;padding:4px 12px;border-radius:999px;font-weight:700;text-transform:capitalize">${status}</span></p>
+  <p>${message}</p>
+  <p style="color:#888;font-size:12px">Thank you for shopping with QuickMart!</p>
+</div>`;
 
 const buildStatusMessage = (status) => {
     switch (status) {
@@ -41,6 +80,13 @@ router.post('/', protect, async (req, res) => {
         for (const item of orderItems) {
             await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.quantity } });
         }
+
+        // Send order confirmation email
+        await sendEmail(
+            req.user.email,
+            '🛒 Order Confirmed - QuickMart',
+            orderConfirmationEmail(order, req.user.name)
+        );
 
         res.status(201).json(order);
     } catch (error) {
@@ -107,7 +153,15 @@ router.put('/:id/status', protect, adminOnly, async (req, res) => {
         order.statusMessage = buildStatusMessage(newStatus);
 
         const updated = await order.save();
-        const populated = await updated.populate('approvedBy', 'name email');
+        const populated = await updated.populate('user', 'name email').then(o => o.populate('approvedBy', 'name email'));
+
+        // Send status update email to user
+        await sendEmail(
+            populated.user.email,
+            `📦 Order ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - QuickMart`,
+            statusUpdateEmail(populated, populated.user.name, newStatus, buildStatusMessage(newStatus))
+        );
+
         res.json(populated);
     } catch (error) {
         res.status(500).json({ message: error.message });
