@@ -153,14 +153,18 @@ router.put('/:id/status', protect, adminOnly, async (req, res) => {
         order.statusMessage = buildStatusMessage(newStatus);
 
         const updated = await order.save();
-        const populated = await updated.populate('user', 'name email').then(o => o.populate('approvedBy', 'name email'));
+        const User = require('../models/User');
+        const orderUser = await User.findById(order.user).select('name email');
+        const populated = await updated.populate('approvedBy', 'name email');
 
         // Send status update email to user
+        console.log('Status update email to:', orderUser?.email);
         await sendEmail(
-            populated.user.email,
+            orderUser.email,
             `📦 Order ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1)} - QuickMart`,
-            statusUpdateEmail(populated, populated.user.name, newStatus, buildStatusMessage(newStatus))
+            statusUpdateEmail(populated, orderUser.name, newStatus, buildStatusMessage(newStatus))
         );
+        console.log('Status email sent!');
 
         res.json(populated);
     } catch (error) {
