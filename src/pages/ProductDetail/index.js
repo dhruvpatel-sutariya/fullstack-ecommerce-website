@@ -16,6 +16,7 @@ const ProductDetail = () => {
     const [qty, setQty] = useState(1);
     const [activeImg, setActiveImg] = useState(0);
     const [rating, setRating] = useState(5);
+    const [hoverRating, setHoverRating] = useState(0);
     const [comment, setComment] = useState('');
     const [reviewMsg, setReviewMsg] = useState('');
 
@@ -107,8 +108,11 @@ const ProductDetail = () => {
                                 <div key={i} className="review-card">
                                     <div className="review-header">
                                         <b>{r.name}</b>
-                                        <div className="review-stars">
-                                            {[...Array(5)].map((_, j) => <FaStar key={j} className={j < r.rating ? 'star filled' : 'star'} />)}
+                                        <div style={{display:'flex', alignItems:'center', gap:10}}>
+                                            <div className="review-stars">
+                                                {[...Array(5)].map((_, j) => <FaStar key={j} className={j < r.rating ? 'star filled' : 'star'} />)}
+                                            </div>
+                                            <span style={{fontSize:11,color:'var(--text-muted)',fontWeight:600}}>{new Date(r.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </div>
                                     <p>{r.comment}</p>
@@ -122,8 +126,14 @@ const ProductDetail = () => {
                             <h4>Write a Review</h4>
                             <div className="rating-select">
                                 {[1, 2, 3, 4, 5].map(n => (
-                                    <FaStar key={n} className={n <= rating ? 'star filled' : 'star'} onClick={() => setRating(n)} style={{ cursor: 'pointer', fontSize: 22 }} />
+                                    <FaStar key={n}
+                                        className={n <= (hoverRating || rating) ? 'star filled' : 'star'}
+                                        onClick={() => setRating(n)}
+                                        onMouseEnter={() => setHoverRating(n)}
+                                        onMouseLeave={() => setHoverRating(0)}
+                                        style={{ cursor: 'pointer', fontSize: 26, transition: 'transform 0.1s' }} />
                                 ))}
+                                <span style={{fontSize:13, color:'var(--text-muted)', fontWeight:600, marginLeft:8}}>{hoverRating || rating} / 5</span>
                             </div>
                             <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Share your experience..." required rows={4} />
                             <button type="submit">Submit Review</button>
