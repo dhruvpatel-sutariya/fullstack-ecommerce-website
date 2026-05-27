@@ -3,19 +3,13 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-});
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendEmail = async (to, subject, html) => {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return;
+    if (!process.env.SENDGRID_API_KEY) return;
     try {
-        await transporter.sendMail({ from: `QuickMart <${process.env.EMAIL_USER}>`, to, subject, html });
+        await sgMail.send({ from: process.env.EMAIL_USER, to, subject, html });
     } catch (e) {
         console.log('Email error:', e.message);
     }
@@ -84,11 +78,15 @@ router.post('/', protect, async (req, res) => {
         }
 
         // Send order confirmation email
+        const User = require('../models/User');
+        const userDoc = await User.findById(req.user._id).select('name email');
+        console.log('Sending email to:', userDoc.email);
         await sendEmail(
-            req.user.email,
+            userDoc.email,
             '🛒 Order Confirmed - QuickMart',
-            orderConfirmationEmail(order, req.user.name)
+            orderConfirmationEmail(order, userDoc.name)
         );
+        console.log('Email sent!');
 
         res.status(201).json(order);
     } catch (error) {
