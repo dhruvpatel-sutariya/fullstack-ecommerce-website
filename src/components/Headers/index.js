@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt, FaBars, FaHeart } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart, FaUser, FaSignOutAlt, FaBars, FaHeart, FaMoon, FaSun } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useWishlist } from '../../context/WishlistContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './header.css';
 
 const Header = () => {
@@ -15,6 +15,12 @@ const Header = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+        localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+    }, [darkMode]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -57,6 +63,9 @@ const Header = () => {
 
                         {/* Actions */}
                         <div className="header-actions">
+                            <button className="dark-mode-btn" onClick={() => setDarkMode(d => !d)} title="Toggle Dark Mode">
+                                {darkMode ? <FaSun /> : <FaMoon />}
+                            </button>
                             <Link to="/wishlist" className="cart-btn">
                                 <FaHeart />
                                 {wishCount > 0 && <span className="cart-badge">{wishCount}</span>}

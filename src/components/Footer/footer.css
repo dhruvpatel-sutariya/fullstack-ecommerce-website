@@ -1,4 +1,4 @@
-.site-footer { background: var(--dark); color: rgba(255,255,255,0.65); margin-top: 60px; position: relative; overflow: hidden; }
+.site-footer { background: #0f0f1a; color: rgba(255,255,255,0.65); margin-top: 60px; position: relative; overflow: hidden; }
 .site-footer::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
