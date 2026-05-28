@@ -2,7 +2,34 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getOrderById } from '../../data/api';
 import { useAuth } from '../../context/AuthContext';
+import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
 import './orderdetail.css';
+
+const STEPS = ['pending', 'approved', 'processing', 'shipped', 'delivered'];
+const STEP_LABELS = { pending: 'Order Placed', approved: 'Approved', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered' };
+const STEP_ICONS = { pending: '🛒', approved: '✅', processing: '⚙️', shipped: '🚚', delivered: '📦' };
+
+const OrderTimeline = ({ status }) => {
+    if (status === 'cancelled') return (
+        <div className="order-timeline">
+            <div className="timeline-cancelled"><FaTimesCircle /> Order Cancelled</div>
+        </div>
+    );
+    const currentIndex = STEPS.indexOf(status);
+    return (
+        <div className="order-timeline">
+            {STEPS.map((step, i) => (
+                <div key={step} className={`timeline-step ${i < currentIndex ? 'done' : i === currentIndex ? 'active' : 'pending-step'}`}>
+                    <div className="timeline-icon">
+                        {i < currentIndex ? <FaCheckCircle /> : i === currentIndex ? STEP_ICONS[step] : <FaClock />}
+                    </div>
+                    <div className="timeline-label">{STEP_LABELS[step]}</div>
+                    {i < STEPS.length - 1 && <div className={`timeline-line ${i < currentIndex ? 'done' : ''}`} />}
+                </div>
+            ))}
+        </div>
+    );
+};
 
 const OrderDetail = () => {
     const { id } = useParams();
@@ -26,6 +53,9 @@ const OrderDetail = () => {
                 <button className="back-link" onClick={() => navigate(-1)}>Back to orders</button>
                 <div className="order-detail-card">
                     <h2>Order #{order._id.slice(-6).toUpperCase()}</h2>
+
+                    <OrderTimeline status={order.status} />
+
                     <div className="order-meta">
                         <div>
                             <h4>Status</h4>
