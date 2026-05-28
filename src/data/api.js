@@ -24,6 +24,9 @@ export const createProduct = (data) => fetch(`${BASE_URL}/products`, { method: '
 export const updateProduct = (id, data) => fetch(`${BASE_URL}/products/${id}`, { method: 'PUT', headers: headers(), body: JSON.stringify(data) }).then(r => r.json());
 export const deleteProduct = (id) => fetch(`${BASE_URL}/products/${id}`, { method: 'DELETE', headers: headers() }).then(r => r.json());
 
+// Upload
+export const uploadImage = (formData) => fetch(`${BASE_URL}/upload`, { method: 'POST', headers: { ...(getToken() && { Authorization: `Bearer ${getToken()}` }) }, body: formData }).then(r => r.json());
+
 // Orders
 export const createOrder = (data) => fetch(`${BASE_URL}/orders`, { method: 'POST', headers: headers(), body: JSON.stringify(data) }).then(r => r.json());
 export const getMyOrders = () => fetch(`${BASE_URL}/orders/myorders`, { headers: headers() }).then(r => r.json());

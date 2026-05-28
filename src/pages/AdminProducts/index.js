@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../../data/api';
+import { getProducts, createProduct, updateProduct, deleteProduct, uploadImage } from '../../data/api';
 import './adminproducts.css';
 
 const defaultForm = {
@@ -68,6 +68,24 @@ const AdminProducts = () => {
       setLoading(false);
     });
   }, [user, navigate]);
+
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await uploadImage(formData);
+    setUploading(false);
+    if (res.url) {
+      setForm(prev => ({ ...prev, images: prev.images ? prev.images + ', ' + res.url : res.url }));
+      setMessage('Image uploaded!');
+    } else {
+      setMessage(res.message || 'Upload failed');
+    }
+  };
 
   const resetForm = () => {
     setMode('create');
@@ -310,7 +328,13 @@ const AdminProducts = () => {
             value={form.images}
             onChange={(e) => setForm({ ...form, images: e.target.value })}
           />
-          <div className="image-hint">Use comma-separated image URLs. Example: https://.../a.jpg, https://.../b.jpg</div>
+          <div style={{display:'flex', alignItems:'center', gap:10}}>
+            <label className="upload-btn">
+              {uploading ? 'Uploading...' : '📁 Upload Image from PC'}
+              <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} style={{display:'none'}} />
+            </label>
+          </div>
+          <div className="image-hint">Upload image from PC or paste URL above.</div>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <input
