@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { createOrder } from '../../data/api';
+import toast from 'react-hot-toast';
 import './checkout.css';
 
 const Checkout = () => {
@@ -81,9 +82,11 @@ const Checkout = () => {
 
     if (res._id) {
       clearCart();
+      toast.success('🎉 Order placed successfully!');
       navigate(`/orders/${res._id}`);
     } else {
       setOrderMsg(res.message || 'Order failed');
+      toast.error(res.message || 'Order failed');
     }
   };
 

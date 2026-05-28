@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../data/api';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 import './auth.css';
 
 const Login = () => {
@@ -20,8 +21,8 @@ const Login = () => {
         setLoading(true); setError('');
         const res = await loginUser(form);
         setLoading(false);
-        if (res.token) { login(res); navigate('/home'); }
-        else setError(res.message || 'Login failed');
+        if (res.token) { login(res); toast.success('Welcome back! 👋'); navigate('/home'); }
+        else { setError(res.message || 'Login failed'); toast.error(res.message || 'Login failed'); }
     };
 
     return (

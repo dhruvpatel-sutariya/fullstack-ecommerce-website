@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import './header.css';
 
 const Header = () => {
@@ -27,7 +28,7 @@ const Header = () => {
         if (search.trim()) navigate(`/products?search=${search}`);
     };
 
-    const handleLogout = () => { logout(); navigate('/'); };
+    const handleLogout = () => { logout(); toast.success('Logged out successfully!'); navigate('/'); };
 
     return (
         <header className="site-header">

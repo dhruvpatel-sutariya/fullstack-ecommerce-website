@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import ProductCard from '../../components/ProductCard';
+import toast from 'react-hot-toast';
 import './wishlist.css';
 
 const Wishlist = () => {
@@ -35,10 +36,10 @@ const Wishlist = () => {
             <div className="wishlist-item" key={p._id}>
               <ProductCard product={p} />
               <div className="wishlist-actions">
-                <button className="btn btn-primary" onClick={() => addToCart(p)} disabled={p.stock === 0}>
+                <button className="btn btn-primary" onClick={() => { addToCart(p); toast.success(`🛒 ${p.name} added to cart!`); }} disabled={p.stock === 0}>
                   Add to Cart
                 </button>
-                <button className="btn btn-outline-danger" onClick={() => removeFromWishlist(p._id)}>
+                <button className="btn btn-outline-danger" onClick={() => { removeFromWishlist(p._id); toast.success('❤️ Removed from wishlist'); }}>
                   Remove
                 </button>
               </div>

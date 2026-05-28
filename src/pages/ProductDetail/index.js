@@ -4,6 +4,7 @@ import { getProductById, addReview } from '../../data/api';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { FaStar, FaShoppingCart, FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 import './productdetail.css';
 
 const ProductDetail = () => {
@@ -24,7 +25,7 @@ const ProductDetail = () => {
         getProductById(id).then(setProduct);
     }, [id]);
 
-    const handleAddToCart = () => { addToCart(product, qty); navigate('/cart'); };
+    const handleAddToCart = () => { addToCart(product, qty); toast.success(`🛒 ${product.name} added to cart!`); navigate('/cart'); };
 
     const handleReview = async (e) => {
         e.preventDefault();

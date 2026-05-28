@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { FaMinus, FaPlus, FaTrash, FaShoppingBag } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 import './cart.css';
 
 const Cart = () => {
@@ -42,7 +43,7 @@ const Cart = () => {
                                     <button onClick={() => updateQty(item._id, item.qty + 1)}><FaPlus /></button>
                                 </div>
                                 <span className="item-total">₹{(item.price * item.qty).toFixed(2)}</span>
-                                <button className="remove-btn" onClick={() => removeFromCart(item._id)}><FaTrash /></button>
+                                <button className="remove-btn" onClick={() => { removeFromCart(item._id); toast.success('Item removed from cart'); }}><FaTrash /></button>
                             </div>
                         ))}
                     </div>

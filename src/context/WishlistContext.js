@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const WishlistContext = createContext();
 
@@ -22,12 +23,13 @@ export const WishlistProvider = ({ children }) => {
 
   const toggleWishlist = (product) => {
     if (!product?._id) return;
-
     const exists = wishlistItems.find((i) => i._id === product._id);
     if (exists) {
       persist(wishlistItems.filter((i) => i._id !== product._id));
+      toast.success('❤️ Removed from wishlist');
     } else {
       persist([...wishlistItems, product]);
+      toast.success('❤️ Added to wishlist!');
     }
   };
 
